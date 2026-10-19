@@ -1,53 +1,65 @@
 # ZeroCurse AI Antivirus 🛡️🌀
 
-[English](#english) | [Русский](#русский)
+A proactive WordPress plugin that detects and limits unauthorized AI scrapers (e.g., GPTBot, Claude-bot, Google-Extended) using a Tar Pit (data trap) mechanism.
 
----
+## How it works
 
-## English
+Unlike traditional firewalls that simply block IPs, ZeroCurse makes scraping more resource‑intensive for the bot by increasing the volume of data it must process.
 
-A proactive anti-bot defense plugin for WordPress that neutralizes unauthorized AI scrapers (like GPTBot, Claude-bot, Google-Extended) using a recursive **(0/0)⁻⁰ mathematical paradox loop**.
+1. **Detection.** Identifies AI crawlers via User‑Agent and other signatures at the earliest server load stage (using the `plugins_loaded` hook).
+2. **Isolation.** Immediately blocks access to real site content by returning HTTP 403.
+3. **Active Trap (Tar Pit).** Sends a stream of JSON chunks to the bot. This increases the amount of data the scraper must download and parse, raising its computational and bandwidth costs.
 
-### How it works
+> **Important:** Effectiveness depends on how the specific scraper handles large responses and unusual numeric patterns. Some clients may ignore the payload or terminate the connection early upon detecting anomalies.
 
-Unlike traditional firewalls that just block IPs, **ZeroCurse** acts as a dynamic data trap (Tar Pit):
-1. **Detection:** Detects AI crawlers via signatures on the earliest server-loading stage.
-2. **Isolation:** Drops connection to the real website content immediately (HTTP 403).
-3. **Neutralization (The Paradox Loop):** Feeds the bot an endless stream of recursive JSON chunks containing IEEE 754-breaking math structures based on `0/0 to the power of minus 0`. 
+## Technical details
 
-This forces the AI scraper's tokenizer and memory stack to process endless data until its server-side connection times out, consuming its computing resources.
+- **Language:** PHP (compatible with standard WordPress core).
+- **Defense method:** Active Defense / Tar Pit.
+- **Trigger:** `plugins_loaded` hook for early request interception.
+- **Server safety:** Built‑in loop limiter and output volume control protect the host server from overload.
 
-### Technical Details
+## Known limitations
 
-- **Language:** PHP (WordPress Core standard)
-- **Method:** Active Defense / Tar Pit
-- **Trigger:** `plugins_loaded` hook for early interception
-- **Memory Safety:** Includes an internal loop limiter to protect the host server from self-hanging.
+- The mathematical pattern (`0/0` raised to `-0`) does not guarantee crashes across all parsers; behavior depends on the scraper’s tokenizer and error‑handling logic.
+- Advanced crawlers may detect abnormally large responses and abort the request early.
+- This plugin increases outbound traffic for blocked bots; consider hosting bandwidth limits.
+- Not intended to block legitimate search engine bots; configure exclusions before enabling active defense.
 
----
+## Quick start
 
-## Русский
+1. Download the plugin ZIP from the latest release.
+2. In WordPress admin: Plugins → Add New → Upload Plugin.
+3. Activate **ZeroCurse AI Antivirus**.
+4. Go to Settings → ZeroCurse and toggle **Active Defense** to ON.
+5. (Optional) Add custom User‑Agent patterns to the blocklist or exclusions.
 
-Проактивный веб-антивирус для защиты сайтов, который ловит и нейтрализует несанкционированные ИИ-сканеры (такие как GPTBot, Claude-bot, Google-Extended) с помощью рекурсивной **петли математического парадокса (0/0)⁻⁰**.
+## License
 
-### Как это работает
+MIT License. Free for personal and commercial use.
 
-В отличие от обычных файрволов, которые просто блокируют IP-адреса, **ZeroCurse** действует как динамическая цифровая ловушка («дегтярная яма» / Tar Pit):
 
-1. **Обнаружение:** Распознает ИИ-краулеры по их цифровым подписям на самом раннем этапе загрузки сервера.
-2. **Изоляция:** Мгновенно перекрывает боту доступ к реальному контенту сайта, выдавая системный ответ (HTTP 403).
-3. **Нейтрализация (Петля Парадокса):** Начинает непрерывно скармливать боту бесконечный поток рекурсивных JSON-пакетов, содержащих ломающие логику ИИ структуры, основанные на делении нуля на ноль в минус нулевой степени.
+# ZeroCurse AI Antivirus 🛡️🌀
 
-Это заставляет токенизатор и оперативную память ИИ-парсера бесконечно обрабатывать уходящие в бесконечность данные, пока сервер бота не отключится аварийно по таймауту, впустую сжигая свои вычислительные ресурсы.
+Проактивный плагин для WordPress, который выявляет и ограничивает работу неавторизованных ИИ‑скраперов (например, GPTBot, Claude‑bot, Google‑Extended) с помощью механизма Tar Pit («дегтярная яма»).
 
-### Технические детали
+## Как это работает
 
-- **Язык:** PHP (стандарт ядра WordPress)
-- **Метод защиты:** Активная оборона / Дегтярная яма (Tar Pit)
-- **Триггер:** Хук `plugins_loaded` для перехвата бота на ранней стадии
-- **Безопасность памяти:** Встроен внутренний ограничитель циклов, защищающий сервер самого сайта от зависания.
+В отличие от традиционных файрволов, которые просто блокируют IP‑адреса, ZeroCurse делает скрапинг дороже для бота за счёт увеличения объёма передаваемых данных и сложности их обработки.
 
----
+1. **Обнаружение.** Плагин распознаёт ИИ‑краулеры по User‑Agent и другим сигнатурам на ранней стадии загрузки сервера (через хук `plugins_loaded`).
+2. **Изоляция.** Доступ к реальному контенту сайта немедленно блокируется: боту возвращается HTTP‑код 403.
+3. **Активная ловушка (Tar Pit).** Вместо пустого ответа плагин отдаёт поток JSON‑чанков. Это увеличивает объём данных, которые бот должен скачать и обработать, и повышает затраты его вычислительных ресурсов.
 
-## License / Лицензия
-MIT License. Free for personal and commercial use. / Полностью бесплатно для личного и коммерческого использования.
+> **Важно:** Эффективность зависит от того, как конкретный бот обрабатывает нестандартные данные и большие ответы. Некоторые парсеры могут игнорировать JSON или сразу прерывать соединение при обнаружении аномалий.
+
+## Технические детали
+
+- **Язык:** PHP (совместим со стандартным ядром WordPress).
+- **Метод защиты:** активная оборона / Tar Pit.
+- **Триггер:** хук `plugins_loaded` для максимально раннего перехвата запроса.
+- **Безопасность сервера:** встроенный ограничитель циклов и контроль объёма отдачи данных защищают сервер сайта от перегрузки.
+
+## Известные ограничения
+
+- Математическая конструкция (`0/0` в степени `-0`) не гарантирует сбой всех парсеров: поведение зависит от реализации токенизатора
